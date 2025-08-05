@@ -15,7 +15,7 @@ mod def;
 mod device;
 mod endpoint;
 mod event;
-mod interface;
+pub mod interface;
 mod reg;
 mod ring;
 mod root;
