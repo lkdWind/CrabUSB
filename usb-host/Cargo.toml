@@ -7,7 +7,10 @@ keywords = ["os", "usb", "xhci", "driver"]
 license = "MIT"
 name = "crab-usb"
 repository = "https://github.com/drivercraft/CrabUSB"
-version = "0.1.4"
+version = "0.2.0"
+
+[features]
+libusb = ["libusb1-sys"]
 
 [dependencies]
 bitflags = "2.8"
@@ -26,6 +29,7 @@ thiserror = {workspace = true}
 tock-registers = "0.10"
 usb-if = {workspace = true}
 xhci = "0.9"
+libusb1-sys = { version = "0.7", optional = true}
 
 [dev-dependencies]
 bare-test = "0.5"
@@ -39,3 +43,4 @@ bare-test-macros = "0.2"
 [[test]]
 harness = false
 name = "test"
+

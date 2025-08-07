@@ -1,12 +1,6 @@
 name: Test
 
-on:
-  push:
-    branches:
-      - main  # Triggers after PR merge to main
-  pull_request:
-    branches:
-      - main  # Triggers on PR creation/update
+on: [push, pull_request]
 
 env:
   qemu-version: 9.2.4
@@ -35,5 +29,5 @@ jobs:
           version: 1.0
       - run: cargo install ostool
       - name: Test no-std
-        run: cargo test -p crab-usb --test test -- --show-output
+        run: cargo test -p crab-usb --test test --target aarch64-unknown-none-softfloat -- --show-output
 
