@@ -11,7 +11,7 @@ use crate::{
 };
 
 pub struct Interface {
-    desc: InterfaceDescriptor,
+    pub desc: InterfaceDescriptor,
     ctrl_ep: EndpointControl,
     ep_map: BTreeMap<Dci, EndpointRaw>,
 }
