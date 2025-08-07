@@ -1,14 +1,18 @@
+use std::sync::Arc;
+
 use libusb1_sys::*;
+use usb_if::host::USBError;
 
 pub struct Context(*mut libusb1_sys::libusb_context);
 
 unsafe impl Send for Context {}
+unsafe impl Sync for Context {}
 
 impl Context {
-    pub fn new() -> crate::err::Result<Self> {
+    pub fn new() -> crate::err::Result<Arc<Self>> {
         let mut ctx = std::ptr::null_mut();
         usb!(libusb1_sys::libusb_init(&mut ctx))?;
-        Ok(Self(ctx))
+        Ok(Arc::new(Self(ctx)))
     }
 
     pub fn device_list(&self) -> crate::err::Result<DeviceList> {
@@ -19,15 +23,20 @@ impl Context {
             len: count as usize,
         })
     }
-}
 
-impl Drop for Context {
-    fn drop(&mut self) {
-        unsafe {
-            libusb1_sys::libusb_exit(self.0);
-        }
+    pub fn handle_events(&self) -> Result<(), USBError> {
+        usb!(libusb1_sys::libusb_handle_events(self.0))?;
+        Ok(())
     }
 }
+
+// impl Drop for Context {
+//     fn drop(&mut self) {
+//         unsafe {
+//             libusb1_sys::libusb_exit(self.0);
+//         }
+//     }
+// }
 
 pub struct DeviceList {
     list: *const *mut libusb_device,

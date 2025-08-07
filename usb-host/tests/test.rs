@@ -43,9 +43,6 @@ mod tests {
             info!("usb host init ok");
             info!("usb cmd test");
 
-            // host.test_cmd().await.unwrap();
-            // info!("usb cmd ok");
-
             let ls = host.device_list().await.unwrap();
 
             for mut info in ls {
@@ -298,7 +295,7 @@ mod tests {
     }
 
     fn register_irq(irq: IrqInfo, host: &mut USBHost) {
-        let ptr = host as *mut USBHost;
+        let handle = host.event_handler();
 
         for one in &irq.cfgs {
             IrqParam {
@@ -307,13 +304,12 @@ mod tests {
             }
             .register_builder({
                 move |_irq| {
-                    unsafe {
-                        (&mut *ptr).handle_event();
-                    }
+                    handle.handle_event();
                     IrqHandleResult::Handled
                 }
             })
             .register();
+            break;
         }
     }
 }

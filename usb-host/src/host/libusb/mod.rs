@@ -17,16 +17,19 @@ mod context;
 mod device;
 mod endpoint;
 mod interface;
+mod queue;
 
 #[macro_use]
 pub(crate) mod err;
+
+use std::sync::Arc;
 
 pub use device::DeviceInfo;
 use futures::FutureExt;
 use usb_if::host::Controller;
 
 pub struct Libusb {
-    ctx: context::Context,
+    ctx: Arc<context::Context>,
 }
 
 impl Controller for Libusb {
@@ -43,7 +46,10 @@ impl Controller for Libusb {
         async move {
             let list = self.ctx.device_list()?;
             let devices = list
-                .map(|raw| Box::new(DeviceInfo::new(raw)) as Box<dyn usb_if::host::DeviceInfo>)
+                .map(|raw| {
+                    Box::new(DeviceInfo::new(raw, self.ctx.clone()))
+                        as Box<dyn usb_if::host::DeviceInfo>
+                })
                 .collect();
 
             Ok(devices)
@@ -51,7 +57,11 @@ impl Controller for Libusb {
         .boxed_local()
     }
 
-    fn handle_event(&mut self) {}
+    fn handle_event(&mut self) {
+        if let Err(e) = self.ctx.handle_events() {
+            log::error!("Failed to handle libusb events: {e:?}");
+        }
+    }
 }
 
 impl Libusb {
