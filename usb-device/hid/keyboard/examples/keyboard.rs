@@ -44,12 +44,12 @@ async fn main() {
     let mut keyboard = KeyBoard::new(device).await.unwrap();
 
     loop {
-        match keyboard.recv().await {
+        match keyboard.recv_events().await {
             Ok(report) => {
                 info!("Received report: {:?}", report);
                 // Process the report as needed
             }
-            Err(e) => {
+            Err(_e) => {
                 // info!("Error receiving report: {:?}", e);
             }
         }

@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.3](https://github.com/drivercraft/CrabUSB/compare/crab-usb-v0.2.2...crab-usb-v0.2.3) - 2025-08-08
+
+### Other
+
+- Dev uvc ([#17](https://github.com/drivercraft/CrabUSB/pull/17))
+
+## [0.2.2](https://github.com/drivercraft/CrabUSB/compare/crab-usb-v0.2.1...crab-usb-v0.2.2) - 2025-08-07
+
+### Fixed
+
+- transfer ring
+
+### Other
+
+- Merge branch 'main' of github.com:drivercraft/CrabUSB
+- keyboard
+
 ## [0.2.1](https://github.com/drivercraft/CrabUSB/compare/crab-usb-v0.2.0...crab-usb-v0.2.1) - 2025-08-07
 
 ### Added
